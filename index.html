@@ -1,14 +1,1138 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8" /><title>Test</title></head>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dowry Ceremony — John &amp; Ruth Ngigi</title>
+<meta name="description" content="Invitation, RSVP, programme and travel guidance for the Dowry Ceremony of John and Ruth Ngigi, 15th August 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8F2E8; }
+</style>
+</head>
 <body>
 <div id="root"></div>
+
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script type="text/babel">
-  const root = ReactDOM.createRoot(document.getElementById("root"));
-  root.render(<h1 style={{fontFamily:"sans-serif", padding:"40px"}}>It works! 🎉</h1>);
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useCallback } = React;
+
+/* ------------------------------------------------------------------------
+   ICONS — small hand-drawn line icons (no external icon library needed)
+------------------------------------------------------------------------- */
+function Icon({ size = 18, color = "currentColor", style, children }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color}
+      strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style} aria-hidden="true">
+      {children}
+    </svg>
+  );
+}
+const Car = (p) => <Icon {...p}><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13" /><rect x="3" y="13" width="18" height="5" rx="1.5" /><circle cx="7.5" cy="18.5" r="1.5" /><circle cx="16.5" cy="18.5" r="1.5" /></Icon>;
+const MapPin = (p) => <Icon {...p}><path d="M12 22s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13z" /><circle cx="12" cy="9" r="2.3" /></Icon>;
+const Navigation = (p) => <Icon {...p}><path d="M12 2 L19 21 L12 17 L5 21 Z" /></Icon>;
+const HomeIcon = (p) => <Icon {...p}><path d="M4 11 L12 4 L20 11" /><path d="M6 10 V20 H18 V10" /></Icon>;
+const Music = (p) => <Icon {...p}><path d="M9 18V5l11-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="17" cy="16" r="3" /></Icon>;
+const Mic = (p) => <Icon {...p}><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0" /><path d="M12 18v4" /><path d="M8 22h8" /></Icon>;
+const HandHeart = (p) => <Icon {...p}><path d="M12 20s-6.5-4-8.5-8C2 8.5 3.4 5.5 6.5 5.5c1.7 0 2.9.9 5.5 3.3 2.6-2.4 3.8-3.3 5.5-3.3 3.1 0 4.5 3 3 6.5-2 4-8.5 8-8.5 8z" /></Icon>;
+const Users = (p) => <Icon {...p}><circle cx="9" cy="8" r="3" /><path d="M4 20c0-3 2.5-5 5-5s5 2 5 5" /><circle cx="17" cy="9" r="2.3" /><path d="M15 20c0-2.5 1.5-4 3.5-4" /></Icon>;
+const BookOpen = (p) => <Icon {...p}><path d="M3 5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0V5z" /><path d="M21 5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0V5z" /></Icon>;
+const Gift = (p) => <Icon {...p}><rect x="4" y="8" width="16" height="4" /><rect x="5" y="12" width="14" height="9" /><path d="M12 8v13" /><path d="M12 8c-1.5-3-5-3-5 0s3.5 1.5 5 0" /><path d="M12 8c1.5-3 5-3 5 0s-3.5 1.5-5 0" /></Icon>;
+const Cake = (p) => <Icon {...p}><path d="M4 21v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7" /><path d="M4 21h16" /><path d="M12 12V8" /><path d="M4 16c1-1 2-1 3 0s2 1 3 0 2-1 3 0 2 1 3 0 2-1 3 0" /></Icon>;
+const Heart = (p) => <Icon {...p}><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2.3 4.5 6 4.5c2 0 3.5 1 6 3.5 2.5-2.5 4-3.5 6-3.5 3.7 0 5.5 3.5 4 7.2C19.5 16.4 12 21 12 21z" /></Icon>;
+const DoorOpen = (p) => <Icon {...p}><rect x="4" y="3" width="9" height="18" rx="1" /><path d="M15 8l5 4-5 4" /></Icon>;
+const Search = (p) => <Icon {...p}><circle cx="10.5" cy="10.5" r="6.5" /><path d="M21 21l-4.3-4.3" /></Icon>;
+const Download = (p) => <Icon {...p}><path d="M12 3v12" /><path d="M7 10l5 5 5-5" /><path d="M4 19h16" /></Icon>;
+const CalendarDays = (p) => <Icon {...p}><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18" /><path d="M8 3v4" /><path d="M16 3v4" /></Icon>;
+const Clock = (p) => <Icon {...p}><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 2" /></Icon>;
+const Sparkles = (p) => <Icon {...p}><path d="M12 2l1.6 4.9L18.5 8.5 13.6 10.1 12 15 10.4 10.1 5.5 8.5 10.4 6.9z" /><path d="M19 15l.8 2.4 2.4.8-2.4.8-.8 2.4-.8-2.4-2.4-.8 2.4-.8z" /></Icon>;
+const Menu = (p) => <Icon {...p}><path d="M4 7h16" /><path d="M4 12h16" /><path d="M4 17h16" /></Icon>;
+const RefreshCw = (p) => <Icon {...p}><path d="M21 12a9 9 0 1 1-2.6-6.4" /><path d="M21 4v5h-5" /></Icon>;
+const MapPinned = (p) => <Icon {...p}><path d="M12 21s6-6.5 6-11.5A6 6 0 1 0 6 9.5C6 14.5 12 21 12 21z" /><circle cx="12" cy="9" r="2" /></Icon>;
+const Compass = (p) => <Icon {...p}><circle cx="12" cy="12" r="9" /><path d="M15 9l-2 6-6 2 2-6z" /></Icon>;
+
+
+/* ------------------------------------------------------------------------
+   EVENT DETAILS — edit these to customise for the real couple / venue
+------------------------------------------------------------------------- */
+const EVENT = {
+  monogram: "J & R",
+  couple: "John & Ruth Ngigi",
+  yearsMarried: 26,
+  rsvpBy: "20th July 2026",
+  dateLabel: "Saturday, 15th August 2026",
+  dateISO: "2026-08-15T11:30:00+03:00",
+  venue: "Maingi's Home, Gitugi",
+  origin: "Nairobi",
+  waypoint: "Nyeri, Othaya Junction",
+  hostContact: "For any queries about the day, please contact Ruth (0720 683 443) or John (0722 728 524).",
+  ruthWhatsApp: "254720683443",
+  johnWhatsApp: "254722728524",
+};
+
+/* ------------------------------------------------------------------------
+   PALETTE — exact swatches from the supplied colour palette board
+------------------------------------------------------------------------- */
+const PALETTE = [
+  { n: 1, name: "Royal Cream", hex: "#F8F2E8" },
+  { n: 2, name: "Ivory Beige", hex: "#EFE3D2" },
+  { n: 3, name: "Champagne Gold", hex: "#D7B98A" },
+  { n: 4, name: "Peach Blush", hex: "#F4C9B3" },
+  { n: 5, name: "Soft Apricot", hex: "#EAB08C" },
+  { n: 6, name: "Burnt Orange", hex: "#B85C2D" },
+  { n: 7, name: "Terracotta", hex: "#A24E2C" },
+  { n: 8, name: "Cinnamon Brown", hex: "#8A5A3C" },
+  { n: 9, name: "Chocolate Brown", hex: "#5B3A29" },
+  { n: 10, name: "Antique Gold", hex: "#C89B52" },
+];
+
+const PROGRAMME = [
+  { time: "7:30 AM", icon: Car, label: "Departure from Nairobi" },
+  { time: "10:00 AM", icon: MapPin, label: "Stop over at Nyeri, Othaya Junction" },
+  { time: "11:00 AM", icon: Navigation, label: "Departure to Gitugi" },
+  { time: "11:30 AM", icon: HomeIcon, label: "Arrive at Maingi's Home, Gitugi" },
+  { time: "12:00 PM", icon: Music, label: "Singing and dancing at the gate" },
+  { time: "12:45 PM", icon: Users, label: "Settling down" },
+  { time: "1:00 PM", icon: Mic, label: "Welcome remarks" },
+  { time: "1:15 PM", icon: HandHeart, label: "Opening / food prayers" },
+  { time: "1:45 PM", icon: Users, label: "Introductions", sub: ["Maingi's Family", "Ng'ang'a's Family"] },
+  { time: "2:15 PM", icon: BookOpen, label: "Sermonette — Rev." },
+  { time: "3:00 PM", icon: Mic, label: "Speeches", sub: ["Parents — both sides", "Siblings — both sides"] },
+  { time: "3:15 PM", icon: Sparkles, label: "Parental blessings" },
+  { time: "3:30 PM", icon: Gift, label: "Gift session" },
+  { time: "4:00 PM", icon: Cake, label: "Cake cutting" },
+  { time: "4:30 PM", icon: Heart, label: "Vote of thanks" },
+  { time: "4:45 PM", icon: HandHeart, label: "Final prayer" },
+  { time: "5:00 PM", icon: DoorOpen, label: "Guests are free to leave" },
+];
+
+const ROUTES = {
+  nairobi: {
+    label: "Nairobi & environs",
+    text: "Follow the Nairobi–Nyeri highway (A2) north through Kenol and Sagana. From Nyeri town, branch toward Othaya — the convoy stops briefly at Othaya Junction before continuing to Gitugi. If you're meeting the convoy at Othaya Junction, please be there by 10:00 AM.",
+  },
+  central: {
+    label: "Nyeri, Murang'a & Central Kenya",
+    text: "You're closest to the venue. Head to Othaya Junction, where you can join the main convoy arriving from Nairobi, then continue together to Maingi's Home, Gitugi. Please be at Othaya Junction by 10:00 AM to meet the convoy.",
+  },
+  nyanza: {
+    label: "Kisumu & Nyanza",
+    text: "Travel via the A1/B1 through Nakuru into Nairobi, or fly directly into JKIA. From Nairobi, join the convoy north on the A2 toward Nyeri and Gitugi. An overnight stay in Nairobi beforehand is recommended, and you should aim to reach Othaya Junction by 10:00 AM.",
+  },
+  riftvalley: {
+    label: "Nakuru & the Rift Valley",
+    text: "Take the A104/A8 toward Nairobi, then pick up the A2 north toward Nyeri — you may also cut across via Nyahururu to Nyeri directly, avoiding Nairobi. Either way, aim to reach Othaya Junction by 10:00 AM.",
+  },
+};
+
+const DIETARY_OPTIONS = [
+  "No restrictions",
+  "Vegetarian",
+  "Vegan",
+  "Halal",
+  "Diabetic-friendly",
+  "Other (please specify)",
+];
+
+/* ------------------------------------------------------------------------
+   STYLE HELPERS
+------------------------------------------------------------------------- */
+function GlobalStyle() {
+  return (
+    <style>{`
+      .ngu-root {
+        --cream: #F8F2E8;
+        --ivory: #EFE3D2;
+        --champagne: #D7B98A;
+        --peach: #F4C9B3;
+        --apricot: #EAB08C;
+        --burnt: #B85C2D;
+        --terracotta: #A24E2C;
+        --cinnamon: #8A5A3C;
+        --chocolate: #5B3A29;
+        --gold: #C89B52;
+        font-family: 'Jost', sans-serif;
+        color: var(--chocolate);
+        background: var(--cream);
+        min-height: 100vh;
+        position: relative;
+      }
+      .ngu-root * { box-sizing: border-box; }
+      .ngu-display { font-family: 'Playfair Display', serif; }
+      .ngu-script { font-family: 'Great Vibes', cursive; }
+      .ngu-root ::selection { background: var(--apricot); color: var(--chocolate); }
+      .ngu-root a { color: inherit; }
+      .ngu-root button { font-family: inherit; cursor: pointer; }
+      .ngu-root input, .ngu-root select, .ngu-root textarea {
+        font-family: 'Jost', sans-serif;
+      }
+      .ngu-focus:focus-visible, .ngu-root button:focus-visible, .ngu-root input:focus-visible,
+      .ngu-root select:focus-visible, .ngu-root textarea:focus-visible, .ngu-root a:focus-visible {
+        outline: 2px solid var(--burnt);
+        outline-offset: 2px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ngu-root * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+      }
+      .ngu-bead-rule {
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+        margin: 0 auto;
+      }
+      .ngu-bead-rule .diamond {
+        width: 7px; height: 7px; transform: rotate(45deg);
+      }
+      .ngu-card {
+        background: linear-gradient(180deg, #FFFDF9 0%, var(--cream) 100%);
+        border: 1px solid rgba(91,58,41,0.14);
+        border-radius: 18px;
+        box-shadow: 0 6px 24px rgba(91,58,41,0.08);
+      }
+      .ngu-btn-primary {
+        background: var(--burnt);
+        color: var(--cream);
+        border: none;
+        border-radius: 999px;
+        padding: 13px 30px;
+        font-size: 0.95rem;
+        letter-spacing: 0.03em;
+        transition: transform 0.15s ease, background 0.15s ease;
+      }
+      .ngu-btn-primary:hover { background: var(--terracotta); transform: translateY(-1px); }
+      .ngu-btn-secondary {
+        background: transparent;
+        color: var(--chocolate);
+        border: 1.5px solid var(--chocolate);
+        border-radius: 999px;
+        padding: 11px 26px;
+        font-size: 0.9rem;
+        transition: all 0.15s ease;
+      }
+      .ngu-btn-secondary:hover { background: var(--chocolate); color: var(--cream); }
+      .ngu-input {
+        width: 100%;
+        border: 1.5px solid rgba(91,58,41,0.25);
+        background: #FFFDF9;
+        border-radius: 10px;
+        padding: 11px 14px;
+        font-size: 0.95rem;
+        color: var(--chocolate);
+      }
+      .ngu-input:focus { border-color: var(--burnt); outline: none; }
+      .ngu-label {
+        display: block;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--cinnamon);
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+      .ngu-nav-link {
+        background: none; border: none; color: var(--cream);
+        font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase;
+        padding: 8px 4px; position: relative; opacity: 0.82;
+      }
+      .ngu-nav-link.active { opacity: 1; }
+      .ngu-nav-link.active::after {
+        content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+        background: var(--apricot);
+      }
+      .ngu-swatch {
+        aspect-ratio: 1; border-radius: 14px; position: relative;
+        box-shadow: inset 0 0 0 1px rgba(91,58,41,0.12);
+      }
+      .ngu-fade-in { animation: nguFadeIn 0.5s ease both; }
+      @keyframes nguFadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity:1; transform:none; } }
+      .ngu-timeline-line {
+        position: absolute; left: 19px; top: 0; bottom: 0; width: 2px;
+        background: repeating-linear-gradient(180deg, var(--gold) 0 6px, transparent 6px 12px);
+      }
+      .ngu-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+      .ngu-scrollbar::-webkit-scrollbar-thumb { background: var(--apricot); border-radius: 8px; }
+      table.ngu-table { border-collapse: collapse; width: 100%; }
+      table.ngu-table th { text-align: left; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cinnamon); padding: 10px 12px; border-bottom: 2px solid var(--champagne); white-space: nowrap; }
+      table.ngu-table td { padding: 10px 12px; border-bottom: 1px solid rgba(91,58,41,0.1); font-size: 0.88rem; vertical-align: top; }
+      table.ngu-table tr:hover td { background: rgba(244,201,179,0.18); }
+      .ngu-pill {
+        display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.72rem;
+        letter-spacing: 0.02em; font-weight: 500;
+      }
+    `}</style>
+  );
+}
+
+/* Botanical line-art corner motif (subtle, original SVG — not a copy of any photo) */
+function CornerMotif({ flip = false, color = "var(--gold)" }) {
+  return (
+    <svg
+      width="120" height="120" viewBox="0 0 120 120" fill="none"
+      style={{
+        position: "absolute", top: 10, [flip ? "right" : "left"]: 10,
+        transform: flip ? "scaleX(-1)" : "none", opacity: 0.55, pointerEvents: "none",
+      }}
+      aria-hidden="true"
+    >
+      <path d="M8 8 C 30 10, 45 25, 46 48" stroke={color} strokeWidth="1.4" fill="none" />
+      <path d="M8 8 C 18 26, 15 45, 30 58" stroke={color} strokeWidth="1.2" fill="none" />
+      <circle cx="46" cy="48" r="6" stroke={color} strokeWidth="1.3" fill="none" />
+      <circle cx="30" cy="58" r="4" stroke={color} strokeWidth="1.1" fill="none" />
+      <path d="M8 8 L 8 34 M8 8 L 34 8" stroke={color} strokeWidth="1" opacity="0.5" />
+      <circle cx="14" cy="14" r="2" fill={color} opacity="0.7" />
+    </svg>
+  );
+}
+
+function BeadRule() {
+  const colors = ["var(--burnt)", "var(--gold)", "var(--terracotta)", "var(--gold)", "var(--burnt)"];
+  return (
+    <div className="ngu-bead-rule" aria-hidden="true">
+      {colors.map((c, i) => (
+        <span key={i} className="diamond" style={{ background: c }} />
+      ))}
+    </div>
+  );
+}
+
+function Monogram({ size = 90 }) {
+  return (
+    <div
+      style={{
+        width: size, height: size, borderRadius: "50%",
+        border: "2px solid var(--gold)", display: "flex", alignItems: "center",
+        justifyContent: "center", background: "#FFFDF9",
+        boxShadow: "0 4px 14px rgba(91,58,41,0.15)",
+      }}
+    >
+      <span className="ngu-display" style={{ fontSize: size * 0.32, color: "var(--terracotta)", fontWeight: 700 }}>
+        {EVENT.monogram}
+      </span>
+    </div>
+  );
+}
+
+function SectionEyebrow({ children }) {
+  return (
+    <div style={{ textAlign: "center", marginBottom: 10 }}>
+      <span style={{
+        fontSize: "0.75rem", letterSpacing: "0.25em", textTransform: "uppercase",
+        color: "var(--terracotta)", fontWeight: 500,
+      }}>{children}</span>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   STORAGE HELPERS
+------------------------------------------------------------------------- */
+const RSVP_KEY = "dowry-ceremony-rsvp-entries";
+
+function loadEntries() {
+  try {
+    const raw = localStorage.getItem(RSVP_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveEntry(entry) {
+  const current = loadEntries();
+  const updated = [...current, entry];
+  localStorage.setItem(RSVP_KEY, JSON.stringify(updated));
+  return updated;
+}
+
+function buildWhatsAppMessage(entry) {
+  const lines = [
+    `RSVP — Dowry Ceremony (${EVENT.dateLabel})`,
+    `Name: ${entry.name}`,
+    `Attending: ${entry.attending === "yes" ? "Joyfully accept" : entry.attending === "maybe" ? "Not sure yet" : "Unavailable"}`,
+  ];
+  if (entry.attending !== "no") {
+    lines.push(`Party size: ${entry.count}`);
+    if (entry.guestNames) lines.push(`Guest names: ${entry.guestNames}`);
+    lines.push(`Dietary: ${entry.dietary === "Other (please specify)" ? entry.dietaryOther : entry.dietary}`);
+    lines.push(`Travelling from: ${ROUTES[entry.departure]?.label || entry.departure}`);
+    if (entry.accommodation) lines.push(`Accommodation needed: ${entry.accommodationDuration}, ${entry.accommodationLocation}`);
+    if (entry.transport) lines.push(`Transport needed for: ${entry.transportCount} people`);
+  }
+  if (entry.message) lines.push(`Message: ${entry.message}`);
+  return lines.join("\n");
+}
+
+function whatsAppLink(entry, number) {
+  return `https://wa.me/${number}?text=${encodeURIComponent(buildWhatsAppMessage(entry))}`;
+}
+
+/* ------------------------------------------------------------------------
+   NAVIGATION
+------------------------------------------------------------------------- */
+const PAGES = [
+  { id: "home", label: "Home" },
+  { id: "rsvp", label: "RSVP" },
+  { id: "palette", label: "Dress & Palette" },
+  { id: "programme", label: "Programme" },
+  { id: "travel", label: "Travel" },
+  { id: "reminders", label: "Reminders" },
+  { id: "dashboard", label: "Organiser" },
+];
+
+function NavBar({ page, setPage }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <header style={{ background: "var(--chocolate)", position: "sticky", top: 0, zIndex: 30 }}>
+      <div style={{
+        maxWidth: 1100, margin: "0 auto", padding: "12px 20px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+      }}>
+        <button
+          onClick={() => setPage("home")}
+          style={{ background: "none", border: "none", display: "flex", alignItems: "center", gap: 10 }}
+        >
+          <Monogram size={38} />
+          <span className="ngu-display" style={{ color: "var(--cream)", fontSize: "1.05rem", letterSpacing: "0.04em" }}>
+            Dowry Ceremony
+          </span>
+        </button>
+        <nav style={{ display: "none", gap: 22 }} className="ngu-nav-desktop">
+          {PAGES.map((p) => (
+            <button
+              key={p.id}
+              className={`ngu-nav-link ${page === p.id ? "active" : ""}`}
+              onClick={() => setPage(p.id)}
+            >
+              {p.label}
+            </button>
+          ))}
+        </nav>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          style={{ background: "none", border: "none", color: "var(--cream)" }}
+          className="ngu-nav-mobile-toggle"
+          aria-label="Toggle navigation"
+        >
+          <Menu size={22} />
+        </button>
+      </div>
+      {open && (
+        <div style={{ background: "var(--chocolate)", borderTop: "1px solid rgba(248,242,232,0.15)", padding: "8px 20px 16px" }} className="ngu-nav-mobile-panel">
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {PAGES.map((p) => (
+              <button
+                key={p.id}
+                className={`ngu-nav-link ${page === p.id ? "active" : ""}`}
+                style={{ textAlign: "left", padding: "10px 4px" }}
+                onClick={() => { setPage(p.id); setOpen(false); }}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      <style>{`
+        @media (min-width: 820px) {
+          .ngu-nav-desktop { display: flex !important; }
+          .ngu-nav-mobile-toggle { display: none !important; }
+        }
+        @media (max-width: 819px) {
+          .ngu-nav-mobile-panel { display: block; }
+        }
+      `}</style>
+    </header>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   HOME PAGE
+------------------------------------------------------------------------- */
+function HomePage({ setPage }) {
+  return (
+    <div className="ngu-fade-in">
+      <section style={{
+        position: "relative", overflow: "hidden", padding: "70px 20px 60px",
+        background: "linear-gradient(180deg, var(--ivory) 0%, var(--cream) 100%)",
+        borderBottom: "1px solid rgba(91,58,41,0.1)",
+      }}>
+        <CornerMotif />
+        <CornerMotif flip />
+        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", position: "relative" }}>
+          <Monogram size={100} />
+          <h1 className="ngu-display" style={{ fontSize: "clamp(2.2rem, 5vw, 3.4rem)", margin: "22px 0 4px", fontWeight: 700, color: "var(--chocolate)" }}>
+            Dowry Ceremony
+          </h1>
+          <p className="ngu-script" style={{ fontSize: "1.7rem", color: "var(--terracotta)", margin: "0 0 18px" }}>
+            Together in Love, Unity &amp; Blessings
+          </p>
+          <BeadRule />
+          <p style={{ maxWidth: 560, margin: "22px auto 0", lineHeight: 1.7, fontSize: "0.98rem" }}>
+            John and Ruth Ngigi warmly invite you to join them on their special day,
+            {" "}{EVENT.dateLabel}.
+          </p>
+          <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 28, flexWrap: "wrap" }}>
+            <button className="ngu-btn-primary" onClick={() => setPage("rsvp")}>Confirm your RSVP</button>
+            <button className="ngu-btn-secondary" onClick={() => setPage("programme")}>View programme</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Event details strip */}
+      <section style={{ padding: "40px 20px" }}>
+        <div style={{
+          maxWidth: 900, margin: "0 auto", display: "grid",
+          gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16,
+        }}>
+          {[
+            { icon: CalendarDays, label: "Date", value: EVENT.dateLabel },
+            { icon: MapPin, label: "Venue", value: EVENT.venue },
+            { icon: Clock, label: "Start Time", value: "11:30 AM" },
+          ].map((d, i) => (
+            <div key={i} className="ngu-card" style={{ padding: "22px 20px", textAlign: "center" }}>
+              <d.icon size={22} color="var(--burnt)" />
+              <div className="ngu-label" style={{ marginTop: 10 }}>{d.label}</div>
+              <div className="ngu-display" style={{ fontSize: "1.05rem", fontWeight: 600 }}>{d.value}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   RSVP PAGE
+------------------------------------------------------------------------- */
+function RsvpPage() {
+  const [copied, setCopied] = useState(false);
+  const copyLink = async () => {
+    const link = `${window.location.origin}${window.location.pathname}#rsvp`;
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch (e) {
+      /* clipboard may be unavailable */
+    }
+  };
+  const [form, setForm] = useState({
+    name: "",
+    guestNames: "",
+    attending: "yes",
+    count: 1,
+    dietary: "No restrictions",
+    dietaryOther: "",
+    accommodation: false,
+    accommodationDuration: "1 night",
+    accommodationLocation: "Nyeri",
+    transport: false,
+    transportCount: 1,
+    departure: "nairobi",
+    message: "",
+  });
+  const [status, setStatus] = useState("idle"); // idle | saving | done | error
+
+  const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const [savedEntry, setSavedEntry] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name.trim()) return;
+    setStatus("saving");
+    const entry = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      ...form,
+      submittedAt: new Date().toISOString(),
+    };
+    try {
+      saveEntry(entry);
+      setSavedEntry(entry);
+      setStatus("done");
+    } catch (err) {
+      setStatus("error");
+    }
+  };
+
+  if (status === "done") {
+    return (
+      <div style={{ maxWidth: 560, margin: "80px auto", textAlign: "center", padding: "0 20px" }} className="ngu-fade-in">
+        <Sparkles size={34} color="var(--burnt)" />
+        <h2 className="ngu-display" style={{ fontSize: "1.7rem", margin: "16px 0 8px" }}>Asante sana!</h2>
+        <p style={{ lineHeight: 1.7 }}>
+          Your response is saved on this device. To make sure Ruth and John actually
+          receive it, please tap below to send it to them on WhatsApp.
+        </p>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 18 }}>
+          <a className="ngu-btn-primary" style={{ textDecoration: "none", display: "inline-block" }}
+             href={whatsAppLink(savedEntry, EVENT.ruthWhatsApp)} target="_blank" rel="noopener noreferrer">
+            Send to Ruth on WhatsApp
+          </a>
+          <a className="ngu-btn-secondary" style={{ textDecoration: "none", display: "inline-block" }}
+             href={whatsAppLink(savedEntry, EVENT.johnWhatsApp)} target="_blank" rel="noopener noreferrer">
+            Send to John on WhatsApp
+          </a>
+        </div>
+        <button className="ngu-btn-secondary" style={{ marginTop: 18, borderColor: "transparent" }} onClick={() => { setStatus("idle"); setForm({ ...form, name: "", guestNames: "", message: "" }); }}>
+          Submit another response
+        </button>
+        <p style={{ fontSize: "0.8rem", color: "var(--cinnamon)", marginTop: 20 }}>{EVENT.hostContact}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="ngu-fade-in" style={{ maxWidth: 720, margin: "0 auto", padding: "50px 20px 80px" }}>
+      <SectionEyebrow>Kindly respond by {EVENT.rsvpBy}</SectionEyebrow>
+      <h1 className="ngu-display" style={{ textAlign: "center", fontSize: "2rem", marginBottom: 8 }}>RSVP &amp; Registration</h1>
+      <p style={{ textAlign: "center", color: "var(--cinnamon)", marginBottom: 18 }}>
+        Please let Ruth and John know if you'll be joining them in Othaya.
+      </p>
+      <div style={{ textAlign: "center", marginBottom: 34 }}>
+        <button type="button" className="ngu-btn-secondary" style={{ fontSize: "0.78rem", padding: "8px 18px" }} onClick={copyLink}>
+          {copied ? "Link copied!" : "Copy shareable RSVP link"}
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit} className="ngu-card" style={{ padding: "34px 28px", display: "grid", gap: 22 }}>
+        <div>
+          <label className="ngu-label" htmlFor="name">Your full name *</label>
+          <input id="name" className="ngu-input" required value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="e.g. Wanjiru Kamau" />
+        </div>
+
+        <div>
+          <label className="ngu-label">Will you be attending?</label>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            {[["yes", "Joyfully accept"], ["maybe", "Not sure yet"], ["no", "Unavailable"]].map(([v, l]) => (
+              <button
+                type="button" key={v}
+                onClick={() => update("attending", v)}
+                style={{
+                  padding: "10px 18px", borderRadius: 999, fontSize: "0.85rem",
+                  border: `1.5px solid ${form.attending === v ? "var(--burnt)" : "rgba(91,58,41,0.25)"}`,
+                  background: form.attending === v ? "var(--burnt)" : "transparent",
+                  color: form.attending === v ? "var(--cream)" : "var(--chocolate)",
+                }}
+              >{l}</button>
+            ))}
+          </div>
+        </div>
+
+        {form.attending !== "no" && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div>
+                <label className="ngu-label" htmlFor="count">Family members attending (incl. you)</label>
+                <input id="count" type="number" min={1} max={20} className="ngu-input" value={form.count} onChange={(e) => update("count", Number(e.target.value))} />
+              </div>
+              <div>
+                <label className="ngu-label" htmlFor="departure">Travelling from</label>
+                <select id="departure" className="ngu-input" value={form.departure} onChange={(e) => update("departure", e.target.value)}>
+                  {Object.entries(ROUTES).map(([k, r]) => (<option key={k} value={k}>{r.label}</option>))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="ngu-label" htmlFor="guestNames">Names of those attending with you (optional)</label>
+              <textarea id="guestNames" className="ngu-input" rows={2} value={form.guestNames} onChange={(e) => update("guestNames", e.target.value)} placeholder="e.g. John Kamau, Grace Wambui" />
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div>
+                <label className="ngu-label" htmlFor="dietary">Dietary requirements</label>
+                <select id="dietary" className="ngu-input" value={form.dietary} onChange={(e) => update("dietary", e.target.value)}>
+                  {DIETARY_OPTIONS.map((d) => (<option key={d} value={d}>{d}</option>))}
+                </select>
+              </div>
+              {form.dietary === "Other (please specify)" && (
+                <div>
+                  <label className="ngu-label" htmlFor="dietaryOther">Please specify</label>
+                  <input id="dietaryOther" className="ngu-input" value={form.dietaryOther} onChange={(e) => update("dietaryOther", e.target.value)} />
+                </div>
+              )}
+            </div>
+
+            <div className="ngu-card" style={{ padding: "18px 20px", background: "var(--ivory)", border: "1px solid rgba(91,58,41,0.12)" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "0.92rem", fontWeight: 500 }}>
+                <input type="checkbox" checked={form.accommodation} onChange={(e) => update("accommodation", e.target.checked)} />
+                I'd like accommodation assistance or lodging recommendations
+              </label>
+              {form.accommodation && (
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginTop: 14 }}>
+                  <div>
+                    <label className="ngu-label" htmlFor="accommodationDuration">Duration of stay</label>
+                    <select id="accommodationDuration" className="ngu-input" value={form.accommodationDuration} onChange={(e) => update("accommodationDuration", e.target.value)}>
+                      <option>1 night</option>
+                      <option>2 nights</option>
+                      <option>3+ nights</option>
+                      <option>Not sure yet</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="ngu-label" htmlFor="accommodationLocation">Preferred location</label>
+                    <select id="accommodationLocation" className="ngu-input" value={form.accommodationLocation} onChange={(e) => update("accommodationLocation", e.target.value)}>
+                      <option>Nyeri</option>
+                      <option>Nairobi</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="ngu-card" style={{ padding: "18px 20px", background: "var(--ivory)", border: "1px solid rgba(91,58,41,0.12)" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "0.92rem", fontWeight: 500 }}>
+                <input type="checkbox" checked={form.transport} onChange={(e) => update("transport", e.target.checked)} />
+                I'd like transportation arranged for me
+              </label>
+              {form.transport && (
+                <div style={{ marginTop: 14 }}>
+                  <label className="ngu-label" htmlFor="transportCount">How many from your party need transport?</label>
+                  <input id="transportCount" type="number" min={1} max={20} className="ngu-input" value={form.transportCount} onChange={(e) => update("transportCount", Number(e.target.value))} />
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
+        <div>
+          <label className="ngu-label" htmlFor="message">A message or well wishes (optional)</label>
+          <textarea id="message" className="ngu-input" rows={3} value={form.message} onChange={(e) => update("message", e.target.value)} />
+        </div>
+
+        <button type="submit" className="ngu-btn-primary" disabled={status === "saving"}>
+          {status === "saving" ? "Sending…" : "Submit RSVP"}
+        </button>
+        {status === "error" && (
+          <p style={{ color: "var(--terracotta)", fontSize: "0.85rem" }}>Something went wrong saving your response — please try again.</p>
+        )}
+        <p style={{ fontSize: "0.78rem", color: "var(--cinnamon)", margin: 0 }}>
+          After submitting, please tap through to WhatsApp so Ruth and John actually receive your response.
+        </p>
+        <p style={{ fontSize: "0.78rem", color: "var(--cinnamon)", margin: 0 }}>{EVENT.hostContact}</p>
+      </form>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   PALETTE & DRESS CODE PAGE
+------------------------------------------------------------------------- */
+function PalettePage() {
+  return (
+    <div className="ngu-fade-in" style={{ maxWidth: 960, margin: "0 auto", padding: "50px 20px 80px" }}>
+      <SectionEyebrow>What to wear</SectionEyebrow>
+      <h1 className="ngu-display" style={{ textAlign: "center", fontSize: "2rem", marginBottom: 10 }}>Dress Code &amp; Colour Palette</h1>
+      <p style={{ textAlign: "center", maxWidth: 620, margin: "0 auto 40px", lineHeight: 1.7, color: "var(--cinnamon)" }}>
+        We'd love for the colours of the day to flow through your outfit too. Please draw
+        from the warm earth tones below — creams, blush, gold, terracotta and chocolate brown.
+        White and ivory are reserved for the bride.
+      </p>
+
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 16, marginBottom: 50,
+      }}>
+        {PALETTE.map((c) => (
+          <div key={c.n}>
+            <div className="ngu-swatch" style={{ background: c.hex }}>
+              <span style={{
+                position: "absolute", bottom: 8, left: 8, width: 24, height: 24, borderRadius: "50%",
+                background: "#FFFDF9", display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "0.7rem", fontWeight: 600, color: "var(--chocolate)", border: "1px solid rgba(91,58,41,0.15)",
+              }}>{c.n}</span>
+            </div>
+            <div style={{ marginTop: 8, textAlign: "center" }}>
+              <div className="ngu-display" style={{ fontSize: "0.88rem", fontWeight: 600 }}>{c.name}</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--cinnamon)", letterSpacing: "0.03em" }}>{c.hex}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 18 }}>
+        {[
+          { title: "Ladies", body: "Maxi dresses, kitenge or ankara-inspired prints, or tailored suits in the palette above. Comfortable shoes are wise — there's dancing at the gate before you sit down." },
+          { title: "Gentlemen", body: "Smart shirts or blazers in terracotta, cinnamon, or chocolate brown, paired with neutral trousers. Traditional shukas or kitenge accents are warmly welcomed." },
+          { title: "A note on white", body: "Please avoid white or head-to-toe ivory, which is reserved for the bride's own outfit on the day." },
+        ].map((s, i) => (
+          <div key={i} className="ngu-card" style={{ padding: "22px 22px" }}>
+            <h3 className="ngu-display" style={{ fontSize: "1.05rem", color: "var(--terracotta)", marginBottom: 8 }}>{s.title}</h3>
+            <p style={{ margin: 0, lineHeight: 1.65, fontSize: "0.9rem" }}>{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   PROGRAMME PAGE
+------------------------------------------------------------------------- */
+function ProgrammePage() {
+  return (
+    <div className="ngu-fade-in" style={{ maxWidth: 720, margin: "0 auto", padding: "50px 20px 80px" }}>
+      <SectionEyebrow>{EVENT.dateLabel}</SectionEyebrow>
+      <h1 className="ngu-display" style={{ textAlign: "center", fontSize: "2rem", marginBottom: 4 }}>Programme of the Day</h1>
+      <p className="ngu-script" style={{ textAlign: "center", fontSize: "1.4rem", color: "var(--terracotta)", margin: "0 0 10px" }}>
+        Together in Love, Unity &amp; Blessings
+      </p>
+      <div style={{
+        textAlign: "center", fontSize: "0.8rem", color: "var(--cinnamon)", marginBottom: 40,
+        background: "var(--peach)", display: "inline-block", padding: "6px 16px", borderRadius: 999,
+        marginLeft: "50%", transform: "translateX(-50%)",
+      }}>
+        Provisional schedule — subject to final confirmation
+      </div>
+
+      <div style={{ position: "relative", paddingLeft: 50 }}>
+        <div className="ngu-timeline-line" />
+        {PROGRAMME.map((item, i) => (
+          <div key={i} style={{ position: "relative", marginBottom: 30 }}>
+            <div style={{
+              position: "absolute", left: -50, top: 0, width: 40, height: 40, borderRadius: "50%",
+              background: i % 2 === 0 ? "var(--burnt)" : "var(--gold)", display: "flex",
+              alignItems: "center", justifyContent: "center", boxShadow: "0 3px 8px rgba(91,58,41,0.25)",
+            }}>
+              <item.icon size={18} color="#FFFDF9" />
+            </div>
+            <div className="ngu-card" style={{ padding: "14px 18px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8 }}>
+                <span className="ngu-display" style={{ fontWeight: 600, fontSize: "1rem" }}>{item.label}</span>
+                <span className="ngu-pill" style={{ background: "var(--ivory)", color: "var(--terracotta)" }}>{item.time}</span>
+              </div>
+              {item.sub && (
+                <ul style={{ margin: "8px 0 0", paddingLeft: 18, fontSize: "0.85rem", color: "var(--cinnamon)" }}>
+                  {item.sub.map((s, j) => (<li key={j}>{s}</li>))}
+                </ul>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p style={{ textAlign: "center", fontSize: "0.85rem", color: "var(--cinnamon)", marginTop: 20 }}>
+        Thank you for being part of our special day. — {EVENT.couple}
+      </p>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   TRAVEL PAGE
+------------------------------------------------------------------------- */
+function TravelPage() {
+  const [region, setRegion] = useState("nairobi");
+  const route = ROUTES[region];
+  return (
+    <div className="ngu-fade-in" style={{ maxWidth: 760, margin: "0 auto", padding: "50px 20px 80px" }}>
+      <SectionEyebrow>Getting to Gitugi</SectionEyebrow>
+      <h1 className="ngu-display" style={{ textAlign: "center", fontSize: "2rem", marginBottom: 10 }}>Travel Assistance</h1>
+      <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 34px", lineHeight: 1.7, color: "var(--cinnamon)" }}>
+        Tell us roughly where you're travelling from, and we'll point you toward the best route to join the convoy.
+      </p>
+
+      <div className="ngu-card" style={{ padding: "26px 26px", marginBottom: 26 }}>
+        <label className="ngu-label" htmlFor="region">I'm travelling from</label>
+        <select id="region" className="ngu-input" value={region} onChange={(e) => setRegion(e.target.value)}>
+          {Object.entries(ROUTES).map(([k, r]) => (<option key={k} value={k}>{r.label}</option>))}
+        </select>
+        <div style={{ display: "flex", gap: 14, marginTop: 20, alignItems: "flex-start" }}>
+          <Compass size={22} color="var(--burnt)" style={{ flexShrink: 0, marginTop: 2 }} />
+          <p style={{ margin: 0, lineHeight: 1.75, fontSize: "0.94rem" }}>{route.text}</p>
+        </div>
+      </div>
+
+      <div className="ngu-card" style={{ padding: "26px 26px" }}>
+        <h3 className="ngu-display" style={{ fontSize: "1.05rem", marginBottom: 16, color: "var(--terracotta)" }}>
+          The convoy's own route, at a glance
+        </h3>
+        <div style={{ display: "grid", gap: 14 }}>
+          {[
+            { icon: Car, t: "7:30 AM", d: `Depart ${EVENT.origin}` },
+            { icon: MapPinned, t: "10:00 AM", d: `Stopover at ${EVENT.waypoint}` },
+            { icon: Navigation, t: "11:00 AM", d: "Onward to Gitugi" },
+            { icon: HomeIcon, t: "11:30 AM", d: `Arrive at ${EVENT.venue}` },
+          ].map((s, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "var(--ivory)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <s.icon size={16} color="var(--burnt)" />
+              </div>
+              <span style={{ fontSize: "0.9rem" }}><strong>{s.t}</strong> — {s.d}</span>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: "0.82rem", color: "var(--cinnamon)", marginTop: 18, marginBottom: 0 }}>
+          Prefer to travel independently? You're welcome to make your own way directly to {EVENT.venue} — just aim to arrive by 11:30 AM.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   REMINDERS PAGE
+------------------------------------------------------------------------- */
+function useCountdown(targetISO) {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000 * 30);
+    return () => clearInterval(t);
+  }, []);
+  const target = new Date(targetISO).getTime();
+  const diff = Math.max(0, target - now);
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  return { days, hours, minutes, isPast: target - now < 0 };
+}
+
+function downloadICS() {
+  const start = EVENT.dateISO.replace(/[-:]/g, "").split(".")[0].replace("+03:00", "");
+  const ics = [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT",
+    `SUMMARY:${EVENT.monogram} Dowry Ceremony`,
+    `DTSTART:${start}Z`,
+    `LOCATION:${EVENT.venue}`,
+    `DESCRIPTION:Dowry Ceremony for ${EVENT.couple}. Starts at ${EVENT.venue}, 11:30 AM.`,
+    "END:VEVENT", "END:VCALENDAR",
+  ].join("\n");
+  const blob = new Blob([ics], { type: "text/calendar" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "dowry-ceremony.ics"; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function RemindersPage() {
+  const { days, hours, minutes, isPast } = useCountdown(EVENT.dateISO);
+  return (
+    <div className="ngu-fade-in" style={{ maxWidth: 680, margin: "0 auto", padding: "50px 20px 80px" }}>
+      <SectionEyebrow>Save the date</SectionEyebrow>
+      <h1 className="ngu-display" style={{ textAlign: "center", fontSize: "2rem", marginBottom: 30 }}>Countdown</h1>
+
+      <div className="ngu-card" style={{ padding: "34px 26px", textAlign: "center", background: "linear-gradient(160deg, var(--peach), var(--cream))" }}>
+        {isPast ? (
+          <p className="ngu-display" style={{ fontSize: "1.3rem" }}>The Dowry Ceremony has taken place. Asante sana to everyone who joined us!</p>
+        ) : (
+          <>
+            <div className="ngu-label" style={{ marginBottom: 8 }}>Counting down to {EVENT.dateLabel}</div>
+            <div style={{ display: "flex", justifyContent: "center", gap: 24 }}>
+              {[[days, "days"], [hours, "hrs"], [minutes, "min"]].map(([v, l], i) => (
+                <div key={i}>
+                  <div className="ngu-display" style={{ fontSize: "2.4rem", fontWeight: 700, color: "var(--burnt)" }}>{v}</div>
+                  <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--cinnamon)" }}>{l}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        <button className="ngu-btn-secondary" style={{ marginTop: 24 }} onClick={downloadICS}>Add to calendar</button>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   ORGANISER DASHBOARD
+------------------------------------------------------------------------- */
+function DashboardPage() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [attendFilter, setAttendFilter] = useState("all");
+  const [accomOnly, setAccomOnly] = useState(false);
+
+  const refresh = useCallback(() => {
+    setLoading(true);
+    const data = loadEntries();
+    setEntries(data);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const filtered = useMemo(() => {
+    return entries.filter((e) => {
+      if (attendFilter !== "all" && e.attending !== attendFilter) return false;
+      if (accomOnly && !e.accommodation) return false;
+      if (search && !`${e.name} ${e.guestNames}`.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    });
+  }, [entries, search, attendFilter, accomOnly]);
+
+  const totals = useMemo(() => {
+    const attending = entries.filter((e) => e.attending === "yes");
+    const guestCount = attending.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
+    const accom = entries.filter((e) => e.accommodation).length;
+    const transportCount = entries.filter((e) => e.transport).reduce((sum, e) => sum + (Number(e.transportCount) || 0), 0);
+    return { responses: entries.length, attending: attending.length, guestCount, accom, transportCount };
+  }, [entries]);
+
+  const exportCSV = () => {
+    const headers = ["Name", "Attending", "Party size", "Guest names", "Dietary", "Accommodation needed", "Accommodation duration", "Accommodation location", "Transport needed", "Transport party size", "Departure region", "Message", "Submitted at"];
+    const rows = filtered.map((e) => [
+      e.name, e.attending, e.count, e.guestNames, e.dietary === "Other (please specify)" ? e.dietaryOther : e.dietary,
+      e.accommodation ? "Yes" : "No", e.accommodation ? e.accommodationDuration : "", e.accommodation ? e.accommodationLocation : "",
+      e.transport ? "Yes" : "No", e.transport ? e.transportCount : "",
+      ROUTES[e.departure]?.label || e.departure, e.message || "", e.submittedAt,
+    ]);
+    const csv = [headers, ...rows]
+      .map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "dowry-ceremony-rsvps.csv"; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="ngu-fade-in" style={{ maxWidth: 1080, margin: "0 auto", padding: "50px 20px 90px" }}>
+      <SectionEyebrow>Organiser access</SectionEyebrow>
+      <h1 className="ngu-display" style={{ textAlign: "center", fontSize: "2rem", marginBottom: 6 }}>Guest Response Dashboard</h1>
+      <p style={{ textAlign: "center", color: "var(--cinnamon)", marginBottom: 20, fontSize: "0.85rem" }}>
+        This is a static website, so this table only shows RSVPs submitted from this browser.
+      </p>
+      <div className="ngu-card" style={{ padding: "14px 18px", marginBottom: 20, background: "var(--peach)", fontSize: "0.85rem", lineHeight: 1.6 }}>
+        The reliable, complete record of guest responses is the WhatsApp messages guests send
+        to Ruth and John when they submit the RSVP form. Use this dashboard as a personal
+        testing/reference view, not the master guest list.
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 14, marginBottom: 26 }}>
+        {[
+          { label: "Total responses", value: totals.responses },
+          { label: "Confirmed attending", value: totals.attending },
+          { label: "Guests expected", value: totals.guestCount },
+          { label: "Need accommodation", value: totals.accom },
+          { label: "Need transport", value: totals.transportCount },
+        ].map((s, i) => (
+          <div key={i} className="ngu-card" style={{ padding: "16px 18px", textAlign: "center" }}>
+            <div className="ngu-display" style={{ fontSize: "1.7rem", fontWeight: 700, color: "var(--burnt)" }}>{s.value}</div>
+            <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--cinnamon)" }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="ngu-card" style={{ padding: "18px 20px", marginBottom: 20, display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ position: "relative", flex: "1 1 220px" }}>
+          <Search size={16} style={{ position: "absolute", left: 12, top: 12, color: "var(--cinnamon)" }} />
+          <input className="ngu-input" style={{ paddingLeft: 34 }} placeholder="Search by name…" value={search} onChange={(e) => setSearch(e.target.value)} />
+        </div>
+        <select className="ngu-input" style={{ width: 190 }} value={attendFilter} onChange={(e) => setAttendFilter(e.target.value)}>
+          <option value="all">All responses</option>
+          <option value="yes">Attending</option>
+          <option value="maybe">Maybe</option>
+          <option value="no">Unavailable</option>
+        </select>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.85rem" }}>
+          <input type="checkbox" checked={accomOnly} onChange={(e) => setAccomOnly(e.target.checked)} />
+          Needs accommodation
+        </label>
+        <button className="ngu-btn-secondary" onClick={refresh} style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 16px" }}>
+          <RefreshCw size={14} /> Refresh
+        </button>
+        <button className="ngu-btn-primary" onClick={exportCSV} style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px" }}>
+          <Download size={14} /> Export CSV
+        </button>
+      </div>
+
+      <div className="ngu-card ngu-scrollbar" style={{ overflowX: "auto", padding: 4 }}>
+        {loading ? (
+          <p style={{ padding: 20 }}>Loading responses…</p>
+        ) : filtered.length === 0 ? (
+          <p style={{ padding: 20, color: "var(--cinnamon)" }}>No responses match yet — invite a few guests to RSVP, or adjust your filters.</p>
+        ) : (
+          <table className="ngu-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Status</th><th>Party</th><th>Dietary</th><th>Accommodation</th><th>Transport</th><th>Departure</th><th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((e) => (
+                <tr key={e.id}>
+                  <td>
+                    <strong>{e.name}</strong>
+                    {e.guestNames && <div style={{ fontSize: "0.78rem", color: "var(--cinnamon)" }}>{e.guestNames}</div>}
+                  </td>
+                  <td>
+                    <span className="ngu-pill" style={{
+                      background: e.attending === "yes" ? "var(--apricot)" : e.attending === "no" ? "var(--ivory)" : "var(--champagne)",
+                      color: "var(--chocolate)",
+                    }}>{e.attending === "yes" ? "Attending" : e.attending === "no" ? "Unavailable" : "Maybe"}</span>
+                  </td>
+                  <td>{e.count}</td>
+                  <td>{e.dietary === "Other (please specify)" ? e.dietaryOther : e.dietary}</td>
+                  <td>{e.accommodation ? `${e.accommodationDuration} — ${e.accommodationLocation}` : "—"}</td>
+                  <td>{e.transport ? `Yes (${e.transportCount})` : "—"}</td>
+                  <td>{ROUTES[e.departure]?.label || "—"}</td>
+                  <td>{new Date(e.submittedAt).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------------
+   ROOT APP
+------------------------------------------------------------------------- */
+function App() {
+  const getPageFromHash = () => {
+    const h = (window.location.hash || "").replace("#", "");
+    return PAGES.some((p) => p.id === h) ? h : "home";
+  };
+  const [page, setPageState] = useState(getPageFromHash);
+
+  const setPage = useCallback((id) => {
+    setPageState(id);
+    try {
+      window.history.replaceState(null, "", `#${id}`);
+    } catch (e) {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    const onHashChange = () => setPageState(getPageFromHash());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [page]);
+
+  const Page = {
+    home: HomePage, rsvp: RsvpPage, palette: PalettePage, programme: ProgrammePage,
+    travel: TravelPage, reminders: RemindersPage, dashboard: DashboardPage,
+  }[page];
+
+  return (
+    <div className="ngu-root">
+      <GlobalStyle />
+      <NavBar page={page} setPage={setPage} />
+      <main>
+        <Page setPage={setPage} />
+      </main>
+      <footer style={{ background: "var(--chocolate)", color: "var(--cream)", textAlign: "center", padding: "26px 20px", fontSize: "0.8rem" }}>
+        <div className="ngu-script" style={{ fontSize: "1.3rem", marginBottom: 4, color: "var(--apricot)" }}>{EVENT.monogram}</div>
+        <div>{EVENT.couple} · {EVENT.dateLabel}</div>
+        <div style={{ marginTop: 4, opacity: 0.85 }}>{EVENT.hostContact}</div>
+      </footer>
+    </div>
+  );
+}
+
+const rootEl = document.getElementById("root");
+ReactDOM.createRoot(rootEl).render(<App />);
 </script>
 </body>
 </html>
