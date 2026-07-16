@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Organiser Dashboard — Dowry Ceremony</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8F2E8; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useMemo, useCallback } = React;
+
+const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwRX5YhheMv0b3-ygx9ge_h6IZL0AJJli8mwXUC3J8Jpxy9n-YTFeh8JkeNYsmLZjzo8w/exec";
+
+const EVENT = {
+  couple: "John & Ruth Ngigi",
+  dateLabel: "Saturday, 15th August 2026",
+};
+
+const ROUTES = {
+  nairobi: { label: "Nairobi & environs" },
+  central: { label: "Nyeri, Murang'a & Central Kenya" },
+  nyanza: { label: "Kisumu & Nyanza" },
+  riftvalley: { label: "Nakuru & the Rift Valley" },
+};
+
+function Icon({ size = 18, color = "currentColor", style, children }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color}
+      strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={style} aria-hidden="true">
+      {children}
+    </svg>
+  );
+}
+const Search = (p) => <Icon {...p}><circle cx="10.5" cy="10.5" r="6.5" /><path d="M21 21l-4.3-4.3" /></Icon>;
+const Download = (p) => <Icon {...p}><path d="M12 3v12" /><path d="M7 10l5 5 5-5" /><path d="M4 19h16" /></Icon>;
+const RefreshCw = (p) => <Icon {...p}><path d="M21 12a9 9 0 1 1-2.6-6.4" /><path d="M21 4v5h-5" /></Icon>;
+const Lock = (p) => <Icon {...p}><rect x="4" y="10" width="16" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></Icon>;
+
+function GlobalStyle() {
+  return (
+    <style>{`
+      .ngu-root {
+        --cream: #F8F2E8; --ivory: #EFE3D2; --champagne: #D7B98A; --peach: #F4C9B3;
+        --apricot: #EAB08C; --burnt: #B85C2D; --terracotta: #A24E2C; --cinnamon: #8A5A3C;
+        --chocolate: #5B3A29; --gold: #C89B52;
+        font-family: 'Jost', sans-serif; color: var(--chocolate); background: var(--cream);
+        min-height: 100vh;
+      }
+      .ngu-root * { box-sizing: border-box; }
+      .ngu-display { font-family: 'Playfair Display', serif; }
+      .ngu-script { font-family: 'Great Vibes', cursive; }
+      .ngu-root button { font-family: inherit; cursor: pointer; }
+      .ngu-root input, .ngu-root select { font-family: 'Jost', sans-serif; }
+      .ngu-card {
+        background: linear-gradient(180deg, #FFFDF9 0%, var(--cream) 100%);
+        border: 1px solid rgba(91,58,41,0.14); border-radius: 18px;
+        box-shadow: 0 6px 24px rgba(91,58,41,0.08);
+      }
+      .ngu-btn-primary {
+        background: var(--burnt); color: var(--cream); border: none; border-radius: 999px;
+        padding: 11px 22px; font-size: 0.9rem; letter-spacing: 0.03em;
+      }
+      .ngu-btn-primary:hover { background: var(--terracotta); }
+      .ngu-btn-secondary {
+        background: transparent; color: var(--chocolate); border: 1.5px solid var(--chocolate);
+        border-radius: 999px; padding: 9px 20px; font-size: 0.85rem;
+      }
+      .ngu-btn-secondary:hover { background: var(--chocolate); color: var(--cream); }
+      .ngu-input {
+        width: 100%; border: 1.5px solid rgba(91,58,41,0.25); background: #FFFDF9;
+        border-radius: 10px; padding: 11px 14px; font-size: 0.95rem; color: var(--chocolate);
+      }
+      .ngu-input:focus { border-color: var(--burnt); outline: none; }
+      .ngu-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }
+      .ngu-scrollbar::-webkit-scrollbar-thumb { background: var(--apricot); border-radius: 8px; }
+      table.ngu-table { border-collapse: collapse; width: 100%; }
+      table.ngu-table th { text-align: left; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cinnamon); padding: 10px 12px; border-bottom: 2px solid var(--champagne); white-space: nowrap; }
+      table.ngu-table td { padding: 10px 12px; border-bottom: 1px solid rgba(91,58,41,0.1); font-size: 0.88rem; vertical-align: top; }
+      table.ngu-table tr:hover td { background: rgba(244,201,179,0.18); }
+      .ngu-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 500; }
+      .ngu-fade-in { animation: nguFadeIn 0.5s ease both; }
+      @keyframes nguFadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity:1; transform:none; } }
+    `}</style>
+  );
+}
+
+function DashboardPage() {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [search, setSearch] = useState("");
+  const [attendFilter, setAttendFilter] = useState("all");
+  const [accomOnly, setAccomOnly] = useState(false);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    setLoadError(false);
+    try {
+      const res = await fetch(SHEETS_ENDPOINT);
+      const data = await res.json();
+      setEntries(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setLoadError(true);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const filtered = useMemo(() => {
+    return entries.filter((e) => {
+      if (attendFilter !== "all" && e.attending !== attendFilter) return false;
+      if (accomOnly && !e.accommodation) return false;
+      if (search && !`${e.name} ${e.guestNames}`.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    });
+  }, [entries, search, attendFilter, accomOnly]);
+
+  const totals = useMemo(() => {
+    const attending = entries.filter((e) => e.attending === "yes");
+    const guestCount = attending.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
+    const accom = entries.filter((e) => e.accommodation).length;
+    const transportCount = entries.filter((e) => e.transport).reduce((sum, e) => sum + (Number(e.transportCount) || 0), 0);
+    return { responses: entries.length, attending: attending.length, guestCount, accom, transportCount };
+  }, [entries]);
+
+  const exportCSV = () => {
+    const headers = ["Submitted", "Name", "Attending", "Party size", "Guest names", "Dietary", "Accommodation needed", "Accommodation duration", "Accommodation location", "Transport needed", "Transport party size", "Contact phone", "Departure region", "Message"];
+    const rows = filtered.map((e) => [
+      e.submittedAt, e.name, e.attending, e.count, e.guestNames, e.dietary,
+      e.accommodation ? "Yes" : "No", e.accommodationDuration || "", e.accommodationLocation || "",
+      e.transport ? "Yes" : "No", e.transportCount || "", e.contactPhone || "",
+      (ROUTES[e.departure] && ROUTES[e.departure].label) || e.departure, e.message || "",
+    ]);
+    const csv = [headers, ...rows]
+      .map((r) => r.map((v) => `"${String(v === null || v === undefined ? "" : v).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "dowry-ceremony-rsvps.csv"; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="ngu-fade-in" style={{ maxWidth: 1080, margin: "0 auto", padding: "50px 20px 90px" }}>
+      <div style={{ textAlign: "center", marginBottom: 6 }}>
+        <Lock size={20} color="var(--terracotta)" />
+      </div>
+      <h1 className="ngu-display" style={{ textAlign: "center", fontSize: "1.9rem", marginBottom: 4 }}>Organiser Dashboard</h1>
+      <p style={{ textAlign: "center", color: "var(--cinnamon)", marginBottom: 26, fontSize: "0.85rem" }}>
+        {EVENT.couple} · {EVENT.dateLabel} — live from the RSVP spreadsheet
+      </p>
+
+      {loadError && (
+        <div className="ngu-card" style={{ padding: "16px 18px", marginBottom: 20, background: "var(--peach)", fontSize: "0.85rem" }}>
+          Couldn't load responses right now. Check your connection and tap Refresh, or open the Google Sheet directly.
+        </div>
+      )}
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 14, marginBottom: 26 }}>
+        {[
+          { label: "Total responses", value: totals.responses },
+          { label: "Confirmed attending", value: totals.attending },
+          { label: "Guests expected", value: totals.guestCount },
+          { label: "Need accommodation", value: totals.accom },
+          { label: "Need transport", value: totals.transportCount },
+        ].map((s, i) => (
+          <div key={i} className="ngu-card" style={{ padding: "16px 18px", textAlign: "center" }}>
+            <div className="ngu-display" style={{ fontSize: "1.7rem", fontWeight: 700, color: "var(--burnt)" }}>{s.value}</div>
+            <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--cinnamon)" }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="ngu-card" style={{ padding: "18px 20px", marginBottom: 20, display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ position: "relative", flex: "1 1 220px" }}>
+          <Search size={16} style={{ position: "absolute", left: 12, top: 12, color: "var(--cinnamon)" }} />
+          <input className="ngu-input" style={{ paddingLeft: 34 }} placeholder="Search by name…" value={search} onChange={(e) => setSearch(e.target.value)} />
+        </div>
+        <select className="ngu-input" style={{ width: 190 }} value={attendFilter} onChange={(e) => setAttendFilter(e.target.value)}>
+          <option value="all">All responses</option>
+          <option value="yes">Attending</option>
+          <option value="maybe">Maybe</option>
+          <option value="no">Unavailable</option>
+        </select>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.85rem" }}>
+          <input type="checkbox" checked={accomOnly} onChange={(e) => setAccomOnly(e.target.checked)} />
+          Needs accommodation
+        </label>
+        <button className="ngu-btn-secondary" onClick={refresh} style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 16px" }}>
+          <RefreshCw size={14} /> Refresh
+        </button>
+        <button className="ngu-btn-primary" onClick={exportCSV} style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 18px" }}>
+          <Download size={14} /> Export CSV
+        </button>
+      </div>
+
+      <div className="ngu-card ngu-scrollbar" style={{ overflowX: "auto", padding: 4 }}>
+        {loading ? (
+          <p style={{ padding: 20 }}>Loading responses…</p>
+        ) : filtered.length === 0 ? (
+          <p style={{ padding: 20, color: "var(--cinnamon)" }}>No responses yet — check back once guests start RSVPing.</p>
+        ) : (
+          <table className="ngu-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Status</th><th>Party</th><th>Dietary</th><th>Accommodation</th><th>Transport</th><th>Contact</th><th>Departure</th><th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((e, i) => (
+                <tr key={i}>
+                  <td>
+                    <strong>{e.name}</strong>
+                    {e.guestNames && <div style={{ fontSize: "0.78rem", color: "var(--cinnamon)" }}>{e.guestNames}</div>}
+                    {e.message && <div style={{ fontSize: "0.75rem", color: "var(--cinnamon)", marginTop: 2 }}>"{e.message}"</div>}
+                  </td>
+                  <td>
+                    <span className="ngu-pill" style={{
+                      background: e.attending === "yes" ? "var(--apricot)" : e.attending === "no" ? "var(--ivory)" : "var(--champagne)",
+                      color: "var(--chocolate)",
+                    }}>{e.attending === "yes" ? "Attending" : e.attending === "no" ? "Unavailable" : "Maybe"}</span>
+                  </td>
+                  <td>{e.count}</td>
+                  <td>{e.dietary}</td>
+                  <td>{e.accommodation ? `${e.accommodationDuration} — ${e.accommodationLocation}` : "—"}</td>
+                  <td>{e.transport ? `Yes (${e.transportCount})` : "—"}</td>
+                  <td>{e.contactPhone || "—"}</td>
+                  <td>{(ROUTES[e.departure] && ROUTES[e.departure].label) || e.departure || "—"}</td>
+                  <td>{e.submittedAt ? new Date(e.submittedAt).toLocaleDateString() : "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className="ngu-root">
+      <GlobalStyle />
+      <DashboardPage />
+    </div>
+  );
+}
+
+const rootEl = document.getElementById("root");
+ReactDOM.createRoot(rootEl).render(<App />);
+</script>
+</body>
+</html>
